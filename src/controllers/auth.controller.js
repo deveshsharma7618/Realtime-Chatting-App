@@ -207,6 +207,7 @@ export const session = async (req, res) => {
         email,
         status: status ?? "verified",
       },
+      status: status ?? "verified",
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
