@@ -39,9 +39,7 @@ const activeSockets = new Map(); // userId -> Set of sockets
 
 io.on('connection', (socket) => {
     const rawCookies = socket.request.headers.cookie;
-    console.log("New socket connection. Raw cookies:", rawCookies);
     const cookies = parseCookies(rawCookies);
-    console.log("Parsed cookies:", cookies);
     const token = cookies.token;
     let user = null;
 
@@ -49,11 +47,9 @@ io.on('connection', (socket) => {
         try {
             user = jwt.verify(token, config.jwtSecret);
             socket.user = user;
-            console.log("Verified user:", user.email);
             const userSockets = activeSockets.get(String(user.id)) || new Set();
             userSockets.add(socket);
             activeSockets.set(String(user.id), userSockets);
-            console.log(`User ${user.email} connected via socket. Total active sockets: ${userSockets.size}`);
         } catch (err) {
             console.error("Socket JWT verification failed:", err.message);
         }
@@ -70,7 +66,6 @@ io.on('connection', (socket) => {
             return socket.emit('error', { message: 'Unauthorized connection' });
         }
 
-        console.log(activeSockets);
 
         const senderEmail = socket.user.email;
         const senderUserId = socket.user.id;
@@ -151,7 +146,6 @@ io.on('connection', (socket) => {
                 if (userSockets.size === 0) {
                     activeSockets.delete(String(socket.user.id));
                 }
-                console.log(`User ${socket.user.email} disconnected. Sockets remaining: ${userSockets ? userSockets.size : 0}`);
             }
         }
     });

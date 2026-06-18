@@ -38,7 +38,7 @@ export const register = async (req, res) => {
       {
         id: newUser._id,
         email: newUser.email,
-        status : newUser.status,
+        status: newUser.status,
       },
       config.jwtSecret,
       {
@@ -69,15 +69,14 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("Login attempt:", { email, password});
     const userAgent = req.get("user-agent") || "Unknown device";
     const forwardedFor = req.headers["x-forwarded-for"];
     const ipAddress = Array.isArray(forwardedFor)
       ? forwardedFor[0]
       : forwardedFor?.split(",")[0]?.trim() ||
-        req.ip ||
-        req.socket?.remoteAddress ||
-        "Unknown";
+      req.ip ||
+      req.socket?.remoteAddress ||
+      "Unknown";
 
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
@@ -123,10 +122,12 @@ export const login = async (req, res) => {
       success: true,
       message: "Login successful",
       data: {
+        id: user._id,
         username: user.username,
         email: user.email,
         status: user.status,
       },
+      token: token
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -199,13 +200,11 @@ export const verifyOtp = async (req, res) => {
 export const session = async (req, res) => {
   try {
     const { id, email, status } = req.user;
-
     res.status(200).json({
       success: true,
       user: {
         id,
         email,
-        status: status ?? "verified",
       },
       status: status ?? "verified",
     });

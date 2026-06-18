@@ -20,7 +20,6 @@ window.onload = async () => {
     window.location.href = "/";
   } else {
     currentUserEmail = data.user.email;
-    console.log("Logged in user:", currentUserEmail);
   }
 };
 
@@ -96,11 +95,9 @@ window.initializeChatListeners = () => {
 };
 
 socket.on("connect", () => {
-  console.log("Socket connected as", socket.id);
 });
 
 socket.on("disconnect", () => {
-  console.log("Socket disconnected");
 });
 
 // Receive incoming private message

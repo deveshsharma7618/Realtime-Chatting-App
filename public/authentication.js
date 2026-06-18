@@ -40,12 +40,10 @@ const tabs = document.querySelectorAll(".tab");
 const screens = document.querySelectorAll(".screen");
 const triggers = document.querySelectorAll("[data-target]");
 
-console.log("Auth JS initialized. Found triggers:", triggers.length);
 
 triggers.forEach((trigger) => {
   trigger.addEventListener("click", (e) => {
     const target = trigger.getAttribute("data-target");
-    console.log("Trigger clicked:", trigger.textContent.trim(), "Target:", target);
     
     // Remove active from all tabs and screens
     tabs.forEach((t) => t.classList.remove("active"));
@@ -66,7 +64,6 @@ triggers.forEach((trigger) => {
         t.classList.add("active");
       }
     });
-    console.log("Active screen updated. Screen found:", foundScreen);
   });
 });
 

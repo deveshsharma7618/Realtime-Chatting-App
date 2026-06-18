@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Realtime Chat</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             color-scheme: dark;
@@ -34,7 +36,7 @@
             min-height: 100vh;
             font-family: var(--font);
             color: var(--text);
-            background: 
+            background:
                 radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15), transparent 40%),
                 radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.12), transparent 40%),
                 #070a13;
@@ -49,8 +51,8 @@
             position: fixed;
             inset: 0;
             pointer-events: none;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px), 
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
             background-size: 40px 40px;
             mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
@@ -427,13 +429,16 @@
         #messages::-webkit-scrollbar {
             width: 6px;
         }
+
         #messages::-webkit-scrollbar-track {
             background: transparent;
         }
+
         #messages::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 99px;
         }
+
         #messages::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.2);
         }
@@ -464,6 +469,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -504,24 +510,28 @@
             .composer {
                 flex-direction: column;
             }
+
             .composer button {
                 width: 100%;
             }
         }
     </style>
 </head>
+
 <body>
     <main class="shell">
         <section class="hero">
             <div>
                 <p class="eyebrow">Realtime messaging</p>
                 <h1>Authenticate once, then stay in the room.</h1>
-                <p>Sign up, verify your email OTP, and the app will keep you in chat as long as your cookie session is valid. If the cookie is missing or expired, you will land back on login.</p>
+                <p>Sign up, verify your email OTP, and the app will keep you in chat as long as your cookie session is
+                    valid. If the cookie is missing or expired, you will land back on login.</p>
             </div>
 
             <div class="hero-card">
                 <strong>How this flow works</strong>
-                <span>1. Create an account.<br>2. Check the OTP email and verify.<br>3. Login again any time the session expires.</span>
+                <span>1. Create an account.<br>2. Check the OTP email and verify.<br>3. Login again any time the session
+                    expires.</span>
             </div>
         </section>
 
@@ -532,8 +542,8 @@
                     <div class="pill" id="session-pill" data-tone="warn">Checking session...</div>
                 </div>
                 <div class="tabs" role="tablist" aria-label="Auth screens">
-                    <button class="tab " type="button" data-target="login">Login</button>
                     <button class="tab active" type="button" data-target="signup">Sign up</button>
+                    <button class="tab " type="button" data-target="login">Login</button>
                 </div>
             </div>
 
@@ -544,11 +554,13 @@
                     <form id="login-form" class="form-grid">
                         <div class="field">
                             <label for="login-email">Email</label>
-                            <input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+                            <input id="login-email" name="email" type="email" autocomplete="email"
+                                placeholder="you@example.com" required>
                         </div>
                         <div class="field">
                             <label for="login-password">Password</label>
-                            <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+                            <input id="login-password" name="password" type="password" autocomplete="current-password"
+                                placeholder="Your password" required>
                         </div>
                         <div class="actions">
                             <button class="primary" type="submit">Login</button>
@@ -561,15 +573,18 @@
                     <form id="signup-form" class="form-grid">
                         <div class="field">
                             <label for="signup-username">Username</label>
-                            <input id="signup-username" name="username" type="text" autocomplete="username" placeholder="chatname" required>
+                            <input id="signup-username" name="username" type="text" autocomplete="username"
+                                placeholder="chatname" required>
                         </div>
                         <div class="field">
                             <label for="signup-email">Email</label>
-                            <input id="signup-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+                            <input id="signup-email" name="email" type="email" autocomplete="email"
+                                placeholder="you@example.com" required>
                         </div>
                         <div class="field">
                             <label for="signup-password">Password</label>
-                            <input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder="At least 6 characters" required>
+                            <input id="signup-password" name="password" type="password" autocomplete="new-password"
+                                placeholder="At least 6 characters" required>
                         </div>
                         <div class="actions">
                             <button class="primary" type="submit">Create account</button>
@@ -585,7 +600,8 @@
                     <form id="otp-form" class="form-grid">
                         <div class="field">
                             <label for="otp-code">OTP</label>
-                            <input id="otp-code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter the code" required>
+                            <input id="otp-code" type="text" inputmode="numeric" autocomplete="one-time-code"
+                                placeholder="Enter the code" required>
                         </div>
                         <div class="actions">
                             <button class="primary" type="submit">Verify OTP</button>
@@ -607,17 +623,20 @@
                         <ul id="messages"></ul>
 
                         <form id="chat-form" class="composer">
-                            <input id="message-input" type="text" autocomplete="off" placeholder="Type a message" disabled>
+                            <input id="message-input" type="text" autocomplete="off" placeholder="Type a message"
+                                disabled>
                             <button class="primary" type="submit" disabled>Send</button>
                         </form>
                     </div>
                 </section>
             </div>
 
-            <div class="screen-footer">This page checks the auth cookie through the server before it opens the socket connection.</div>
+            <div class="screen-footer">This page checks the auth cookie through the server before it opens the socket
+                connection.</div>
         </section>
     </main>
 
     <script src="authentication.js"></script>
 </body>
+
 </html>
