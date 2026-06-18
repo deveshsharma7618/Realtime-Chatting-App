@@ -38,18 +38,37 @@ loginFormEl.addEventListener("submit", async (event) => {
 
 const tabs = document.querySelectorAll(".tab");
 const screens = document.querySelectorAll(".screen");
-tabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
+const triggers = document.querySelectorAll("[data-target]");
+
+console.log("Auth JS initialized. Found triggers:", triggers.length);
+
+triggers.forEach((trigger) => {
+  trigger.addEventListener("click", (e) => {
+    const target = trigger.getAttribute("data-target");
+    console.log("Trigger clicked:", trigger.textContent.trim(), "Target:", target);
+    
+    // Remove active from all tabs and screens
     tabs.forEach((t) => t.classList.remove("active"));
     screens.forEach((s) => s.classList.remove("active"));
-    const target = tab.getAttribute("data-target")
+    
+    // Add active to matching screen
+    let foundScreen = false;
     screens.forEach((s) => {
-      s.getAttribute("data-screen") === target && s.classList.add("active");
+      if (s.getAttribute("data-screen") === target) {
+        s.classList.add("active");
+        foundScreen = true;
+      }
     });
-    tab.classList.add("active");
-  }
-  )
-})
+    
+    // Add active to matching tab (if it is one of the main tabs)
+    tabs.forEach((t) => {
+      if (t.getAttribute("data-target") === target) {
+        t.classList.add("active");
+      }
+    });
+    console.log("Active screen updated. Screen found:", foundScreen);
+  });
+});
 
 
 const signupFormEl = document.getElementById("signup-form");

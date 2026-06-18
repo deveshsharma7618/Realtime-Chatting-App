@@ -10,6 +10,7 @@ connectDB(env.mongoUri);
 
 
 
-server.listen(env.port, () => {
+server.listen(env.port, '0.0.0.0', () => {
   console.log(`Server is running on port ${env.port}`);
+  console.log(`Backend URL: http://localhost:${env.port}`);
 });

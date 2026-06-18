@@ -27,9 +27,10 @@ const userSchema = new mongoose.Schema(
       select: false, // Don't return password by default
     },
     contacts : {
-      type : [String],
+      type : [ mongoose.Schema.Types.ObjectId],
       default : [],
       required : false,
+      ref : 'Contact'
     }
   },
   { timestamps: true }

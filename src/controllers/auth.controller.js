@@ -69,6 +69,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log("Login attempt:", { email, password});
     const userAgent = req.get("user-agent") || "Unknown device";
     const forwardedFor = req.headers["x-forwarded-for"];
     const ipAddress = Array.isArray(forwardedFor)
