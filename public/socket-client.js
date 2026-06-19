@@ -81,6 +81,18 @@ window.initializeChatListeners = () => {
       chatUsernameEl.textContent = activeChatUsername;
       chatAvatarEl.src = `https://i.pravatar.cc/100?img=${(idx % 70) + 1}`;
       
+      // Update chat status in header
+      const statusSpan = friend.querySelector(".avatar-wrapper span");
+      const isOnline = statusSpan && statusSpan.classList.contains("online");
+      const chatStatusEl = document.getElementById("chat-status");
+      if (chatStatusEl) {
+        if (isOnline) {
+          chatStatusEl.innerHTML = `<span class="online" style="position:static; display:inline-block; margin-right:6px;"></span>Online`;
+        } else {
+          chatStatusEl.innerHTML = `<span class="offline" style="position:static; display:inline-block; margin-right:6px;"></span>Offline`;
+        }
+      }
+      
       chatHeader.style.display = "flex";
       messagesEl.style.display = "flex";
       chatPlaceholder.style.display = "none";
@@ -98,6 +110,34 @@ socket.on("connect", () => {
 });
 
 socket.on("disconnect", () => {
+});
+
+// Receive real-time user status updates
+socket.on("user status", (data) => {
+  const { email, status } = data;
+  
+  const friendEl = document.querySelector(`.friend[data-email="${email}"]`);
+  if (friendEl) {
+    const statusSpan = friendEl.querySelector(".avatar-wrapper span");
+    if (statusSpan) {
+      if (status === "online") {
+        statusSpan.className = "online";
+      } else {
+        statusSpan.className = "offline";
+      }
+    }
+  }
+  
+  if (email === activeChatUserEmail) {
+    const chatStatusEl = document.getElementById("chat-status");
+    if (chatStatusEl) {
+      if (status === "online") {
+        chatStatusEl.innerHTML = `<span class="online" style="position:static; display:inline-block; margin-right:6px;"></span>Online`;
+      } else {
+        chatStatusEl.innerHTML = `<span class="offline" style="position:static; display:inline-block; margin-right:6px;"></span>Offline`;
+      }
+    }
+  }
 });
 
 // Receive incoming private message

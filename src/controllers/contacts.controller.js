@@ -10,9 +10,16 @@ export const getContacts = async (req, res) => {
             ]
         }).populate('senderUser', 'username email').populate('receiverUser', 'username email');
 
+        const activeSockets = req.app.get('activeSockets');
+
         const users = acceptedContacts.map(c => {
-            return String(c.senderUser._id) === String(req.user.id) ? c.receiverUser : c.senderUser;
+            const contactUser = String(c.senderUser._id) === String(req.user.id) ? c.receiverUser : c.senderUser;
+            const isOnline = activeSockets ? activeSockets.has(String(contactUser._id)) : false;
+            const userObj = contactUser.toObject();
+            userObj.isOnline = isOnline;
+            return userObj;
         });
+        console.log(users)
         return res.status(200).json(users);
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -21,13 +28,13 @@ export const getContacts = async (req, res) => {
 
 export const searchContact = async (req, res) => {
     try {
-        const { search_contact } = req.body;
-        if (!search_contact) {
+        const { searchContact } = req.body;
+        if (!searchContact) {
             return res.status(400).json({ message: 'Search query is required' });
         }
 
         const user = await User.findOne({ 
-            $or: [{ email: search_contact }, { username: search_contact }],
+            $or: [{ email: searchContact }, { username: searchContact    }],
             _id: { $ne: req.user.id }
         }).select('username email');
 

@@ -36,6 +36,40 @@ const parseCookies = (cookieString) => {
 };
 
 const activeSockets = new Map(); // userId -> Set of sockets
+app.set('activeSockets', activeSockets);
+
+async function broadcastStatusToContacts(user, status) {
+    try {
+        const userIdStr = String(user.id);
+        const userEmail = user.email;
+
+        // Find all accepted contacts of the user
+        const contacts = await Contact.find({
+            $or: [
+                { senderUser: userIdStr, status: 'accepted' },
+                { receiverUser: userIdStr, status: 'accepted' }
+            ]
+        });
+
+        contacts.forEach(contact => {
+            const contactId = String(contact.senderUser) === userIdStr 
+                ? String(contact.receiverUser) 
+                : String(contact.senderUser);
+
+            const recipientSockets = activeSockets.get(contactId);
+            if (recipientSockets) {
+                recipientSockets.forEach(s => {
+                    s.emit('user status', {
+                        email: userEmail,
+                        status: status
+                    });
+                });
+            }
+        });
+    } catch (error) {
+        console.error("Error broadcasting status:", error);
+    }
+}
 
 io.on('connection', (socket) => {
     const rawCookies = socket.request.headers.cookie;
@@ -47,9 +81,15 @@ io.on('connection', (socket) => {
         try {
             user = jwt.verify(token, config.jwtSecret);
             socket.user = user;
-            const userSockets = activeSockets.get(String(user.id)) || new Set();
+            const userIdStr = String(user.id);
+            const userSockets = activeSockets.get(userIdStr) || new Set();
+            const wasOffline = userSockets.size === 0;
             userSockets.add(socket);
-            activeSockets.set(String(user.id), userSockets);
+            activeSockets.set(userIdStr, userSockets);
+
+            if (wasOffline) {
+                broadcastStatusToContacts(user, 'online');
+            }
         } catch (err) {
             console.error("Socket JWT verification failed:", err.message);
         }
@@ -140,11 +180,13 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         if (socket.user) {
-            const userSockets = activeSockets.get(String(socket.user.id));
+            const userIdStr = String(socket.user.id);
+            const userSockets = activeSockets.get(userIdStr);
             if (userSockets) {
                 userSockets.delete(socket);
                 if (userSockets.size === 0) {
-                    activeSockets.delete(String(socket.user.id));
+                    activeSockets.delete(userIdStr);
+                    broadcastStatusToContacts(socket.user, 'offline');
                 }
             }
         }

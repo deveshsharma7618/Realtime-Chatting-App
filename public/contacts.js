@@ -47,7 +47,7 @@ const loadContacts = async () => {
                 <div class="friend" data-email="${contact.email}" data-username="${contact.username}">
                     <div class="avatar-wrapper">
                         <img src="https://i.pravatar.cc/100?img=${(idx % 70) + 1}" class="avatar">
-                        <span class="online"></span>
+                        <span class="${contact.isOnline ? 'online' : 'offline'}"></span>
                     </div>
                     <div class="friend-info">
                         <div class="friend-name">${contact.username}</div>

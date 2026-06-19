@@ -33,7 +33,6 @@ export const getMessageHistory = async (req, res) => {
                 { senderEmail: otherUserEmail, receiverEmail: currentUserEmail }
             ]
         }).sort({ createdAt: 1 });
-
         return res.status(200).json(messages);
     } catch (error) {
         return res.status(500).json({ error: error.message });
